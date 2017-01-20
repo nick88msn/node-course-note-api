@@ -28,13 +28,13 @@ MongoClient.connect('mongodb://localhost:27017/TodoApp', (err, db) => {
   });
 
 // Popoliamo il db Users
-db.collection('Users').insertMany(
-  [{name: 'Nicola'},{name: 'Franco'},{name: 'Luca'}, {name: 'Luca'}], (err, result) => {
-    if(err){
-      return console.log('Unable to insert Users: ', err);
-    }
-    console.log(JSON.stringify(result.ops, undefined, 2));
-});
+// db.collection('Users').insertMany(
+//   [{name: 'Nicola'},{name: 'Franco'},{name: 'Luca'}, {name: 'Luca'}], (err, result) => {
+//     if(err){
+//       return console.log('Unable to insert Users: ', err);
+//     }
+//     console.log(JSON.stringify(result.ops, undefined, 2));
+// });
 
 //Utilizziamo count per verificare con una query quanti utenti di nome Nicola ci sono
 
