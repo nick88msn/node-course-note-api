@@ -7,6 +7,8 @@ var {User} = require('./models/user');
 
 const {ObjectID} = require('mongodb');
 
+const port = process.env.PORT || 3000;
+
 var app = express();
 
 app.use(bodyParser.json());
@@ -49,12 +51,12 @@ app.get('/todos/:id', (req, res) =>{
         }
       }).catch((e) => res.status(400).send());
     } else {
-      return res.status(400).send('Oject ID is not Valid');
+      return res.status(404).send('Object ID is not Valid');
     }
 });
 
-app.listen(3000, () => {
-  console.log('Listening on port 3000');
+app.listen(port, () => {
+  console.log('Listening on port', port);
 });
 
 
