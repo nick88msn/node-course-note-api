@@ -7,10 +7,13 @@ const {Todo} = require('./../models/todo');
 
 const todos = [{
   _id: new ObjectID(),
-  text: 'First test to do'
+  text: 'First test to do',
+  completed: false
 },{
   _id: new ObjectID(),
-  text: 'Second test to do'
+  text: 'Second test to do',
+  completed: true,
+  completedAt: 333
 }];
 
 var badID = new ObjectID();
@@ -117,5 +120,54 @@ describe('DELETE /todos/:id', () => {
   it('should return 404 if object id is not valid', (done) => {
     request(app).delete(`/todos/123123123`).expect(404).end(done);
   });
+
+});
+
+describe('PATCH /todos/:id', () => {
+
+  it('should update a document', (done) =>{
+    var hexID = todos[0]._id.toHexString();
+    var text = 'Some new Text for Test';
+    request(app).patch(`/todos/${hexID}`).send({text, completed: true}).expect(200).expect((res)=>{
+        expect(res.body.todo.completed).toBe(true);
+        expect(res.body.todo.text).toBe(text);
+        expect(res.body.todo.completedAt).toBeA('number');
+      }).end((err, res) => {
+      if (err) {
+        return done(err);
+      }
+      Todo.findById(hexID).then((todo) =>{
+        expect(todo.completed).toBe(true);
+        expect(todo.text).toBe(text);
+        expect(todo.completedAt).toExist();
+        done();
+      }).catch((e) => done(e));
+    });
+  });
+
+  it('should clear completedAt when todo is not completed', (done) => {
+    var hexID = todos[1]._id.toHexString();
+    var text = 'Some new Text for Test';
+
+    request(app).patch(`/todos/${hexID}`).send({text, completed: false}).expect(200).expect((res)=>{
+        expect(res.body.todo.completed).toBe(false);
+        expect(res.body.todo.text).toBe(text);
+      }).end((err, res) => {
+      if (err) {
+        return done(err);
+      }
+      Todo.findById(hexID).then((todo) =>{
+        expect(todo.completed).toBe(false);
+        expect(todo.text).toBe(text);
+        expect(todo.completedAt).toNotExist();
+        done();
+      }).catch((e) => done(e));
+    });
+
+  });
+  //grab id osecond todo item
+  //update text , set completed to false
+  //200
+  //body text is changed e completed false e completedAt is null .tonotexist()
 
 });
