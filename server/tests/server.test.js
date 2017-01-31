@@ -223,13 +223,13 @@ describe('POST /users', () => {
 
   it('should not create user if email in user', (done) =>{
     request(app)
-    .post('/users')
-    .send({
-      email: users[0].email,
-      password: '123456abc@'
-    })
-    .expect(400)
-    .end(done);
+      .post('/users')
+      .send({
+        email: users[0].email,
+        password: '123456abc@'
+      })
+      .expect(400)
+      .end(done);
   });
 
 
